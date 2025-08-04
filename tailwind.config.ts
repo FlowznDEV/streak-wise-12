@@ -52,16 +52,20 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+				// TreineAI Custom Colors
+				treino: {
+					basic: 'hsl(var(--treino-basic))',
+					medium: 'hsl(var(--treino-medium))',
+					body: 'hsl(var(--treino-body))'
+				},
+				diet: {
+					light: 'hsl(var(--diet-light))',
+					moderate: 'hsl(var(--diet-moderate))',
+					heavy: 'hsl(var(--diet-heavy))'
+				},
+				success: 'hsl(var(--success))',
+				warning: 'hsl(var(--warning))',
+				info: 'hsl(var(--info))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

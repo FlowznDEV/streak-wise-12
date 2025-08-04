@@ -1,12 +1,100 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from 'react';
+import Navigation from '@/components/Layout/Navigation';
+import Dashboard from '@/components/Dashboard/Dashboard';
+import TreinosTab from '@/components/Treinos/TreinosTab';
+import DietaTab from '@/components/Dieta/DietaTab';
+import MetasTab from '@/components/Metas/MetasTab';
+import PlanosTab from '@/components/Planos/PlanosTab';
+import ComunidadeTab from '@/components/Comunidade/ComunidadeTab';
+import LoginForm from '@/components/Auth/LoginForm';
+import RegisterForm from '@/components/Auth/RegisterForm';
+import { cn } from '@/lib/utils';
 
 const Index = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [userPlan, setUserPlan] = useState<'basic' | 'average' | 'body'>('basic');
+  const [userData, setUserData] = useState({
+    name: 'Usuário',
+    email: '',
+    goal: 'Emagrecimento'
+  });
+
+  const handleLogin = (email: string, password: string) => {
+    setIsAuthenticated(true);
+    setUserData(prev => ({ ...prev, email }));
+  };
+
+  const handleRegister = (data: any) => {
+    setIsAuthenticated(true);
+    setUserData({
+      name: data.name,
+      email: data.email,
+      goal: data.goal
+    });
+    setUserPlan(data.plan);
+  };
+
+  const handleUpgrade = (planId: string) => {
+    setUserPlan(planId as 'basic' | 'average' | 'body');
+  };
+
+  if (!isAuthenticated) {
+    return showRegister ? (
+      <RegisterForm 
+        onRegister={handleRegister}
+        onSwitchToLogin={() => setShowRegister(false)}
+      />
+    ) : (
+      <LoginForm 
+        onLogin={handleLogin}
+        onSwitchToRegister={() => setShowRegister(true)}
+      />
+    );
+  }
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <Dashboard userPlan={userPlan} onNavigate={setActiveTab} userName={userData.name} userGoal={userData.goal} />;
+      case 'treinos':
+        return <TreinosTab />;
+      case 'dieta':
+        return <DietaTab />;
+      case 'metas':
+        return <MetasTab />;
+      case 'comunidade':
+        return <ComunidadeTab userPlan={userPlan} userName={userData.name} />;
+      case 'planos':
+        return <PlanosTab currentPlan={userPlan} onUpgrade={handleUpgrade} />;
+      case 'desafios':
+        return <div className="text-center py-20"><h2 className="text-2xl">Desafios em desenvolvimento...</h2></div>;
+      case 'assistente':
+        return <div className="text-center py-20"><h2 className="text-2xl">Assistente IA em desenvolvimento...</h2></div>;
+      case 'aprenda':
+        return <div className="text-center py-20"><h2 className="text-2xl">Aprenda em desenvolvimento...</h2></div>;
+      case 'suporte':
+        return <div className="text-center py-20"><h2 className="text-2xl">Suporte em desenvolvimento...</h2></div>;
+      case 'perfil':
+        return <div className="text-center py-20"><h2 className="text-2xl">Perfil em desenvolvimento...</h2></div>;
+      default:
+        return <Dashboard userPlan={userPlan} onNavigate={setActiveTab} userName={userData.name} userGoal={userData.goal} />;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navigation 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+        userPlan={userPlan}
+      />
+      <main className={cn("transition-all duration-300 pl-64")}>
+        <div className="p-6">
+          {renderActiveTab()}
+        </div>
+      </main>
     </div>
   );
 };
