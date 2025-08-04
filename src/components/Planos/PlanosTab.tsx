@@ -39,14 +39,18 @@ interface PlanosTabProps {
 }
 
 const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
+  const paymentLinks = {
+    basic: 'https://pay.cakto.com.br/hxgigeg_511033',
+    average: 'https://pay.cakto.com.br/oeozva2_511036',
+    body: 'https://pay.cakto.com.br/3d9kuts_511040'
+  };
 
   const plans: Plan[] = [
     {
       id: 'basic',
       name: 'Basic Builder',
-      price: billingPeriod === 'monthly' ? 29.90 : 299.00,
-      period: billingPeriod === 'monthly' ? '/mês' : '/ano',
+      price: 29.90,
+      period: '/mês',
       description: 'Perfeito para quem está começando a jornada fitness',
       features: [
         'Acesso completo a Treinos',
@@ -69,8 +73,8 @@ const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
     {
       id: 'average',
       name: 'Average Builder',
-      price: billingPeriod === 'monthly' ? 49.90 : 499.00,
-      period: billingPeriod === 'monthly' ? '/mês' : '/ano',
+      price: 49.90,
+      period: '/mês',
       description: 'Para quem quer ir além e se conectar com a comunidade',
       features: [
         'Tudo do Basic Builder',
@@ -92,8 +96,8 @@ const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
     {
       id: 'body',
       name: 'Body Builder',
-      price: billingPeriod === 'monthly' ? 69.90 : 699.00,
-      period: billingPeriod === 'monthly' ? '/mês' : '/ano',
+      price: 69.90,
+      period: '/mês',
       description: 'A experiência completa para transformação total',
       features: [
         'Tudo do Average Builder',
@@ -137,7 +141,10 @@ const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
     return Check;
   };
 
-  const savings = billingPeriod === 'yearly' ? '2 meses grátis!' : null;
+  const handlePayment = (planId: string) => {
+    const paymentUrl = paymentLinks[planId as keyof typeof paymentLinks];
+    window.open(paymentUrl, '_blank');
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -149,7 +156,7 @@ const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
         </h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           Escolha o plano ideal para sua jornada de transformação. 
-          Upgrade ou downgrade a qualquer momento.
+          Pagamento seguro via Cakto.
         </p>
       </div>
 
@@ -177,39 +184,6 @@ const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
           </div>
         </CardContent>
       </Card>
-
-      {/* Billing Period Toggle */}
-      <div className="flex justify-center">
-        <div className="bg-card rounded-lg p-1 flex">
-          <button
-            onClick={() => setBillingPeriod('monthly')}
-            className={cn(
-              "px-4 py-2 rounded-md text-sm font-medium transition-colors",
-              billingPeriod === 'monthly' 
-                ? "bg-primary text-primary-foreground" 
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Mensal
-          </button>
-          <button
-            onClick={() => setBillingPeriod('yearly')}
-            className={cn(
-              "px-4 py-2 rounded-md text-sm font-medium transition-colors relative",
-              billingPeriod === 'yearly' 
-                ? "bg-primary text-primary-foreground" 
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Anual
-            {savings && (
-              <Badge className="absolute -top-2 -right-2 text-xs bg-success">
-                Economize
-              </Badge>
-            )}
-          </button>
-        </div>
-      </div>
 
       {/* Plans Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -249,16 +223,13 @@ const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
                   <p className="text-muted-foreground text-sm">{plan.description}</p>
                 </div>
 
-                <div className="space-y-1">
-                  <div className="text-3xl font-bold flex items-baseline justify-center gap-1">
-                    <span className="text-lg">R$</span>
-                    {plan.price.toFixed(2).replace('.', ',')}
-                    <span className="text-sm text-muted-foreground">{plan.period}</span>
-                  </div>
-                  {billingPeriod === 'yearly' && (
-                    <p className="text-xs text-success">Economize 20%</p>
-                  )}
-                </div>
+                 <div className="space-y-1">
+                   <div className="text-3xl font-bold flex items-baseline justify-center gap-1">
+                     <span className="text-lg">R$</span>
+                     {plan.price.toFixed(2).replace('.', ',')}
+                     <span className="text-sm text-muted-foreground">{plan.period}</span>
+                   </div>
+                 </div>
               </CardHeader>
 
               <CardContent className="space-y-6">
@@ -293,27 +264,28 @@ const PlanosTab = ({ currentPlan, onUpgrade }: PlanosTabProps) => {
                   </div>
                 )}
 
-                {/* Action Button */}
-                <div className="pt-4">
-                  {isCurrentPlan ? (
-                    <Button className="w-full" disabled>
-                      <Check className="w-4 h-4 mr-2" />
-                      Plano Atual
-                    </Button>
-                  ) : (
-                    <Button
-                      className={cn(
-                        "w-full",
-                        isUpgrade && "bg-gradient-primary hover:opacity-90",
-                        isDowngrade && "variant-outline"
-                      )}
-                      onClick={() => onUpgrade(plan.id)}
-                    >
-                      {isUpgrade && <Star className="w-4 h-4 mr-2" />}
-                      {isUpgrade ? 'Fazer Upgrade' : 'Mudar Plano'}
-                    </Button>
-                  )}
-                </div>
+                 {/* Action Button */}
+                 <div className="pt-4">
+                   {isCurrentPlan ? (
+                     <Button className="w-full" disabled>
+                       <Check className="w-4 h-4 mr-2" />
+                       Plano Atual
+                     </Button>
+                   ) : (
+                     <Button
+                       className={cn(
+                         "w-full",
+                         isUpgrade && "bg-gradient-primary hover:opacity-90",
+                         isDowngrade && "variant-outline"
+                       )}
+                       onClick={() => handlePayment(plan.id)}
+                     >
+                       {isUpgrade && <Star className="w-4 h-4 mr-2" />}
+                       <CreditCard className="w-4 h-4 mr-2" />
+                       Assinar por R$ {plan.price.toFixed(2)}
+                     </Button>
+                   )}
+                 </div>
               </CardContent>
             </Card>
           );
