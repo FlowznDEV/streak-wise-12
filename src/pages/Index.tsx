@@ -6,6 +6,9 @@ import DietaTab from '@/components/Dieta/DietaTab';
 import MetasTab from '@/components/Metas/MetasTab';
 import PlanosTab from '@/components/Planos/PlanosTab';
 import ComunidadeTab from '@/components/Comunidade/ComunidadeTab';
+import DesafiosTab from '@/components/Desafios/DesafiosTab';
+import AssistenteTab from '@/components/Assistente/AssistenteTab';
+import AprendaTab from '@/components/Aprenda/AprendaTab';
 import LoginForm from '@/components/Auth/LoginForm';
 import RegisterForm from '@/components/Auth/RegisterForm';
 import { cn } from '@/lib/utils';
@@ -69,13 +72,11 @@ const Index = () => {
       case 'planos':
         return <PlanosTab currentPlan={userPlan} onUpgrade={handleUpgrade} />;
       case 'desafios':
-        return <div className="text-center py-20"><h2 className="text-2xl">Desafios em desenvolvimento...</h2></div>;
+        return <DesafiosTab />;
       case 'assistente':
-        return <div className="text-center py-20"><h2 className="text-2xl">Assistente IA em desenvolvimento...</h2></div>;
+        return <AssistenteTab />;
       case 'aprenda':
-        return <div className="text-center py-20"><h2 className="text-2xl">Aprenda em desenvolvimento...</h2></div>;
-      case 'suporte':
-        return <div className="text-center py-20"><h2 className="text-2xl">Suporte em desenvolvimento...</h2></div>;
+        return <AprendaTab />;
       case 'perfil':
         return <div className="text-center py-20"><h2 className="text-2xl">Perfil em desenvolvimento...</h2></div>;
       default:

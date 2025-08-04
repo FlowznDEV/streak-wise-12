@@ -82,13 +82,6 @@ const Navigation = ({ activeTab, onTabChange, userPlan }: NavigationProps) => {
       available: userPlan === 'body'
     },
     { 
-      id: 'suporte', 
-      label: 'Suporte', 
-      icon: HelpCircle, 
-      color: 'text-destructive',
-      available: true 
-    },
-    { 
       id: 'perfil', 
       label: 'Perfil', 
       icon: User, 

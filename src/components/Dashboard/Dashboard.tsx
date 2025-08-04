@@ -25,8 +25,8 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ userPlan, onNavigate, userName, userGoal }: DashboardProps) => {
-  const [currentStreak, setCurrentStreak] = useState(7);
-  const [totalDays, setTotalDays] = useState(15);
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [totalDays, setTotalDays] = useState(0);
   const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false);
 
   useEffect(() => {
@@ -85,13 +85,13 @@ const Dashboard = ({ userPlan, onNavigate, userName, userGoal }: DashboardProps)
       available: userPlan === 'body'
     },
     {
-      title: 'Suporte',
-      description: 'Precisa de ajuda?',
-      icon: Clock,
-      color: 'text-destructive',
-      bgColor: 'bg-destructive/10',
-      onClick: () => onNavigate('suporte'),
-      available: true
+      title: 'Desafios',
+      description: 'Desafios diários',
+      icon: Award,
+      color: 'text-treino-medium',
+      bgColor: 'bg-treino-medium/10',
+      onClick: () => onNavigate('desafios'),
+      available: userPlan === 'average' || userPlan === 'body'
     }
   ];
 
